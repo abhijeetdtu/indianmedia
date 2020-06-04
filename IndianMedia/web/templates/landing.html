@@ -1,0 +1,32 @@
+{% extends 'layout.html'%}
+
+{% block content %}
+
+<div id="vue-app" class="vue-app">
+  <b-dropdown id="dropdown-1" text="Add a Dashboard" class="m-md-2">
+    <b-dropdown-item v-for="option in {{ dash_urls }}" :key="option" :value="option" @click="loadDashApp(option)">[[option]]</b-dropdown-item>
+  </b-dropdown>
+  <!-- <button v-on:click="loadDashApp('/dash/wordtrend/')" class="btn btn-dark">Load Dash App</button> -->
+  <!-- <div v-for="app in dashApps" v-html="app" class="col col-md-12">
+      </div> -->
+  <div class="dash-container container">
+    <div class="row shadow-sm mb-2 bg-white rounded" v-for="app in dashApps" :key="app">
+      <div class="col-md col-md-almost-full">
+        <div class="row-fluid">
+          <div class="col-md-12">
+            <div class="embed-responsive embed-custom">
+              <iframe v-bind:src="app" class="embed-responsive-item"> </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-almost-nill">
+        <button type="button" class="btn btn-outline-danger btn-sm" v-on:click="deleteDashApp(app)">X</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="dash-app-staging"></div>
+
+{% endblock %}

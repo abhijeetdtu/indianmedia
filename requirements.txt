@@ -1,0 +1,10 @@
+pandas
+flask
+sklearn
+spacy
+dash
+plotnine
+pymongo
+nltk
+python-youtube
+bs4
