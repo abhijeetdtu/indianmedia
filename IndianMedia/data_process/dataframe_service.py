@@ -4,7 +4,7 @@ from IndianMedia.constants import FlatFiles
 from IndianMedia.mongointf.pymongoconn import DBConnection
 from ast import literal_eval
 
-@utils.singleton
+#@utils.singleton
 class DataFrameService:
 
     def __init__(self):

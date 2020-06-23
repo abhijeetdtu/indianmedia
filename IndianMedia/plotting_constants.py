@@ -3,7 +3,8 @@ from plotnine import (theme
 , element_rect
 , element_text
 , scale_fill_manual
-, scale_color_manual)
+, scale_color_manual
+,scale_fill_gradient)
 
 from numpy import random
 from pandas import Series
@@ -11,6 +12,9 @@ import json
 
 class THEME():
     bgcolor = "#293241"
+    LOADER_COLOR = "#2a9d8f"
+    LOADER_TYPE = "dot"
+
     colors_light = ["#d88c9a","#f2d0a9" , "#f1e3d3" , "#99c1b9" , "#8e7dbe" , "#2a9d8f" , "#797d62" ,"#3a6ea5"]
     mt = theme(panel_background=element_rect(fill=bgcolor)
                ,plot_background=element_rect(fill=bgcolor)
@@ -22,9 +26,11 @@ class THEME():
 
     cat_colors = scale_fill_manual(values = colors_light)
     cat_colors_lines = scale_color_manual(values = colors_light)
-
+    gradient_colors = scale_fill_gradient("#aad576", "#ce4257")
     FILL = 1
     COLOR = 2
+
+    LONG_FIGURE = (10,20)
 
 class ColorPalette:
 

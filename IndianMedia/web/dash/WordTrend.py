@@ -8,10 +8,13 @@ from dash.dependencies import Input, Output
 
 from plotnine import *
 
+import logging
 import pandas as pd
 import numpy as np
 import random
 import json
+
+logging.basicConfig(level = logging.INFO)
 
 class WordTrend(DashApp):
 
@@ -42,7 +45,7 @@ class WordTrend(DashApp):
 
         return df
 
-    def _chart(self,df):
+    def _chart(self,df,checklist, selected_words):
 
         if df is None:
             return self.getErrorPlot(self.ERROR_MSG)
@@ -62,7 +65,7 @@ class WordTrend(DashApp):
 
     def plot(self,checklist, selected_words):
         df = self._filteredDf(checklist , selected_words)
-        p = self._chart(df)
+        p = self._chart(df,checklist, selected_words)
         return p
 
 
@@ -71,11 +74,8 @@ class WordTrend(DashApp):
         if df.shape[0] > 0:
             self.colors = ColorPalette.mapRandomColors( df["channel_id"], THEME.COLOR)
 
-
-    def makeLayout(self):
-
-        self.app.layout = html.Div(className="dash-container container p-0 m-0", children=[
-        html.Div(className="row" , children=[
+    def makeInputLayout(self):
+        return html.Div(className="row" , children=[
             html.Div(className="col-md-3" , children=[
                 dcc.Input(id=DashApp.HTML_IDS.WORD_INPUT
                             , placeholder=self.INPUT_PLACEHOLDER
@@ -94,53 +94,60 @@ class WordTrend(DashApp):
                 ),
 
             ])
-        ]),
-        html.Div(className="row-fluid" , children=[
-            html.Img(id=DashApp.HTML_IDS.IMG,  className="plot-img img-fluid")
-        ])])
-        #
-        # self.app.layout = html.Div(children=[
-        # dcc.Input(id=WordTrend.HTML_IDS.WORD_INPUT
-        #             , placeholder=self.INPUT_PLACEHOLDER
-        #             ,value=self.default_word
-        #             , type='text'
-        #             , className="form-control"
-        #             ,debounce=True),
-        # dcc.Checklist(
-        #     id=WordTrend.HTML_IDS.CHECKLIST,
-        #     className="dash-checklist form-check form-check-inline",
-        #     options=[],
-        #     value=[WordTrend.HTML_IDS.CHECKLIST_ALL]
-        # ),
-        # #self.dashImg(id=WordTrend.HTML_IDS.IMG , word=self.default_word)
-        # html.Img(id=WordTrend.HTML_IDS.IMG,  className="plot-img img-fluid")
-        # ]
-        #
-        # )
+        ])
 
+
+    def _update_checklist(self,input_value):
+        word = input_value.lower()
+        df = DataFrameService().getWordDates(word)
+        options = [{"label" : c , 'value':c} for c in df["channel_id"].unique()]
+        options.append({"label" : WordTrend.HTML_IDS.CHECKLIST_ALL , 'value':WordTrend.HTML_IDS.CHECKLIST_ALL})
+        return options
+
+    def _filter_based_on_checklist(self,checklist , word):
+        if len(checklist) == 0:
+            # Nothing selected then show error image
+            p = self.getErrorPlot(self.NO_SELECTION_MSG)
+        else:
+            p = self.plot(checklist ,word)
+
+        logging.info("Plot to Img Src")
+        src = self.plotToImgSrc(p)
+        logging.info("Src to Dash Imgs")
+        imgs  =self.srcToImgs(src)
+        logging.info("Dash Imgs to Layout")
+        children = self.makePlotImgsLayout(imgs)
+        return children
+
+    def setupCallBacks(self):
         @self.app.callback(
             Output(component_id=WordTrend.HTML_IDS.CHECKLIST, component_property='options'),
             [Input(component_id=WordTrend.HTML_IDS.WORD_INPUT, component_property='value')]
         )
         def update_checklist(input_value):
-            word = input_value.lower()
-            df = DataFrameService().getWordDates(word)
-            options = [{"label" : c , 'value':c} for c in df["channel_id"].unique()]
-            options.append({"label" : WordTrend.HTML_IDS.CHECKLIST_ALL , 'value':WordTrend.HTML_IDS.CHECKLIST_ALL})
-            return options
-
+            return self._update_checklist(input_value)
 
         @self.app.callback(
-            Output(component_id=WordTrend.HTML_IDS.IMG, component_property='src'),
+            Output(component_id=WordTrend.HTML_IDS.IMG, component_property='children'),
             [Input(component_id=WordTrend.HTML_IDS.CHECKLIST, component_property='value'),
             Input(component_id=WordTrend.HTML_IDS.WORD_INPUT, component_property='value')]
         )
         def filter_based_on_checklist(checklist , word):
-            if len(checklist) == 0:
-                # Nothing selected then show error image
-                p = self.getErrorPlot(self.NO_SELECTION_MSG)
-            else:
-                p = self.plot(checklist ,word)
+            return self._filter_based_on_checklist(checklist , word)
 
-            src = self.plotToImgSrc(p)
-            return src
+    def makeLayout(self):
+
+        self.app.layout = html.Div(className="dash-container container p-0 m-0", children=[
+            self.makeInputLayout(),
+            dcc.Loading(
+                id="loading-holder",
+                color=THEME.LOADER_COLOR,
+                type=THEME.LOADER_TYPE,
+                children=[
+                    html.Div(className="row-fluid" , children=[
+                        html.Div(id=DashApp.HTML_IDS.IMG,  className="plot-holder-div")
+                    ])
+                ]
+            )
+        ])
+        self.setupCallBacks()

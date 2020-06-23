@@ -1,6 +1,8 @@
 import os
-
+import logging
 import pathlib
+import hashlib
+
 def getCurrentDIR():
     try:
         f = pathlib.Path(__file__).resolve().absolute()
@@ -27,6 +29,13 @@ def singleton(class_):
             instances[class_] = class_(*args, **kwargs)
         return instances[class_]
     return getinstance
+
+def getLogging():
+    logging.basicConfig(level=logging.INFO)
+    return logging
+
+def get_string_hash(stringVal):
+    return hashlib.sha224(stringVal.encode("utf-8")).hexdigest()
 
 if __name__ == "__main__":
     print(getDataDIR())

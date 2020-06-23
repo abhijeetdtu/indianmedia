@@ -3,3 +3,4 @@ venv
 _keyfile*
 data
 *.csv
+env_variables.yaml

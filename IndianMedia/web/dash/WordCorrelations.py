@@ -43,11 +43,10 @@ class WordCorrelations(WordTrend):
         #print(df)
         return df
 
-    def _chart(self,df):
+    def _chart(self,df,checklist, word):
 
         if df is None:
             return self.getErrorPlot(self.ERROR_MSG.format(word=word))
-
 
         channels = df["channel_id"].unique()
         colors = scale_color_manual(values= self.colors)
@@ -60,9 +59,3 @@ class WordCorrelations(WordTrend):
       + theme(figure_size=(20,5) , panel_grid_major=element_blank() , panel_grid_minor=element_blank())
 
         return p
-
-    def setupOptions(self):
-        df = DataFrameService().getWordCorrelations(self.default_word)
-        print(df)
-        if df.shape[0] > 0:
-            self.colors = ColorPalette.mapRandomColors( df["channel_id"], THEME.COLOR)

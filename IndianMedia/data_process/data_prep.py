@@ -71,7 +71,7 @@ class DataPrepJob:
             col_corr = col.reset_index().pivot_table(index="level_1",columns="channel_id" )
             col_corr = col_corr.droplevel(0 , axis=1)
             js = {"word_id" : col.name , "corrs" : json.loads(col_corr.to_json(orient="columns"))}
-            self.dbcon.wordCorrCollection.insert_one(js)
+            self.dbcon.wordCorrCollection.update_one({"word_id" : col.name} , {"$set" : js} , True)
 
         corrs_df.apply(word_corr)
 
@@ -162,7 +162,7 @@ class DataPrepJob:
         logging.info("-- Saving Time series into Mongo")
         js = json.loads(word_by_date.to_json(orient="columns"))
         for k,v in js.items():
-            self.dbcon.wordDateCollection.insert_one({"word_id" : k , "ts" :v})
+            self.dbcon.wordDateCollection.update_one({"word_id" : k} ,{ "$set": {"word_id" : k, "ts" :v}} , True)
 
 
         #word_by_date["date"] = pd.to_datetime(word_by_date["date"] , format="%m_%d_%y")

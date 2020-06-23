@@ -8,3 +8,9 @@ pymongo
 nltk
 python-youtube
 bs4
+statsmodels
+circlify
+networkx
+dnspython
+gunicorn
+psutil

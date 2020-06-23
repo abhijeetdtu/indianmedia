@@ -5,7 +5,10 @@
 .dash-container {
   max-width: 98%;
 }
-
+.loading-holder{
+  position:relative;
+  top:40%;
+}
 ._dash-loading{
   border: 16px solid #f3f3f3; /* Light grey */
   border-top: 16px solid #3498db; /* Blue */
@@ -30,4 +33,17 @@
 
 .dash-checklist input{
     margin-right: .5rem;
+}
+
+
+.topic-indicator {
+  align-items: center;
+  background-color: #e9c46a;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.topic-indicator span{
+  vertical-align: middle;
 }

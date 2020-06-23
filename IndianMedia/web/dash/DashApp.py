@@ -4,11 +4,17 @@ from io import BytesIO
 import dash_html_components as html
 import pathlib
 import os
+import random
 
 from pandas import DataFrame
 from plotnine import ggplot ,aes, geom_label ,geom_text, theme, element_blank , element_text
 
+from multiprocessing.dummy import Pool as ThreadPool
+
 from IndianMedia.plotting_constants import THEME
+from IndianMedia.utils import getLogging
+
+log = getLogging()
 
 class DashApp:
 
@@ -22,6 +28,8 @@ class DashApp:
         SHADOW_SM_CLS = "shadow-sm p-1 bg-white rounded"
 
     def __init__(self, route , flaskApp):
+        #self.imp_dump = os.path.join(pathlib.Path(__file__).resolve().parent.parent.absolute() , "static" , "temp_imgs")
+        self.pool = ThreadPool(5)
         external_stylesheets = [
             'https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css'
         ]
@@ -61,18 +69,38 @@ class DashApp:
         return p
 
     def plotToImgSrc(self,p):
-        fig = p.draw()
-
-        tmpfile = BytesIO()
-        fig.savefig(tmpfile, format='png' , bbox_inches='tight')
-        encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
-        plot_img = 'data:image/png;base64,{}'.format(encoded)
-
+        if type(p) == list:
+            plot_img = self.pool.map(lambda pi:self.plotToImgSrc(pi) , p) #[self.plotToImgSrc(pi) for pi in p]
+        else:
+            fig = p.draw()
+            tmpfile = BytesIO()
+            #tmpfile = str(random.randint(0,100000000))
+            #fp = os.path.join(self.imp_dump , tmpfile)
+            fig.savefig(tmpfile, format='png' ,bbox_inches='tight')
+            #log.info("Saved--")
+            encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
+            plot_img = 'data:image/png;base64,{}'.format(encoded)
+            #plot_img = f"/static/temp_imgs/{tmpfile}"
         return plot_img
+
+    def srcToImgs(self,src):
+        id = "abc"
+        if type(src) != list:
+            src = [src]
+
+        imgCls = ""
+        return [ html.Img(id=f"{id}_sub_{i}",src=s, className=f"plot-img img-fluid {imgCls}" ) for i,s in enumerate(src)]
+        #return html.Div(id=id,children=fhtml, className="plot-img")
 
     def plotToDashImg(self , p , id):
         src = self.plotToImgSrc(p)
-        return html.Img(id=id,src=src, className="plot-img")
+        if type(src) != list:
+            src = [src]
+        fhtml = [ html.Img(id=f"{id}_sub_{i}",src=s, className="plot-img img-fluid") for i,s in enumerate(src)]
+        return html.Div(id=id,children=[fhtml], className="plot-img")
+
+    def makePlotImgsLayout(self,plotImgs):
+        return html.Div(children=plotImgs, className="imgs-container")
 
     def dashImg(self ,id=None, *args , **kwargs):
         return self.plotToDashImg(self.plot(*args , **kwargs), id)

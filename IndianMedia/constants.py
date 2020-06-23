@@ -14,6 +14,16 @@ class MongoConsts:
     WORD_DATE_COLLECTION = "worddate"
     WORD_CORR_COLLECTION = "wordcor"
     ARTICLE_COLLECTION = "articles"
+    GOOD_NEWS_COLLECTION = "goodnews"
+    TD_COLLECTION = "topicdist"
+    TD_SVD_COMP_COLLECTION = f"{TD_COLLECTION}.svdcomp"
+    TD_SVD_DF_COLLECTION = f"{TD_COLLECTION}.svddf"
+    TD_TOPICS_COLLECTION = f"{TD_COLLECTION}.topics"
+    TD_DOC_TOPICS_COLLECTION = f"{TD_COLLECTION}.doc.topics"
+
+    QD_TERM_BASED_DISTANCE_ROOT = "termbaseddist"
+    QD_TRBD_TERM_DIST_COLLECTION = f"{QD_TERM_BASED_DISTANCE_ROOT}.termdist"
+    QD_TRBD_GRP_DIST_COLLECTION = f"{QD_TERM_BASED_DISTANCE_ROOT}.groupdist"
 
 class Channels:
     WIRE= "UChWtJey46brNr7qHQpN6KLQ"
@@ -26,7 +36,8 @@ class Channels:
         "PRINT": THE_PRINT,
         "INDIA_TODAY" : INDIA_TODAY,
         "REPUBLIC_WORLD" : REPUBLIC_WORLD,
-        "TIMES_NOW" : "UC6RJ7-PaXg6TIH2BzZfTV7w"
+        "TIMES_NOW" : "UC6RJ7-PaXg6TIH2BzZfTV7w",
+        "DD_INDIA":"UCGDQNvybfDDeGTf4GtigXaw"
     }
 
     MAX_VIDEOS = 2000
