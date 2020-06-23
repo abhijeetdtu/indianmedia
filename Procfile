@@ -1,1 +1,1 @@
-web: gunicorn IndianMedia.web.main:app
+web: gunicorn IndianMedia.web.main
