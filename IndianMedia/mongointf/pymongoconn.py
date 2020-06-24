@@ -19,6 +19,8 @@ class DBConnection():
             connString = self.getRemoteConnectionString()
         else:
             connString = self.getLocalConnectionString()
+
+        print(connString)
         self.client = MongoClient(connString)
         self.indianMediaVideoCollection = self.client[MongoConsts.DB][MongoConsts.VIDEO_COLLECTION]
         self.wordDateCollection = self.client[MongoConsts.DB][MongoConsts.WORD_DATE_COLLECTION]
