@@ -172,7 +172,7 @@ class TermDistMetricDataFrameService(TermDistMetric):
 
         pdf = pdf.drop(["dist_x" ,"dist_y" , "label_x" , "label_y" ] , axis=1)
         pdf[["chnl","word"]] = pdf[["chnl","word"]].astype("category")
-        pdf[ ["x_word" , "y_word" , "x_chnl" , "y_chnl"]] = pdf[[ "x_word" , "y_word" , "x_chnl" , "y_chnl"]].astype("float32")
+        pdf[ ["x_word" , "y_word" , "x_chnl" , "y_chnl"]] = pdf[[ "x_word" , "y_word" , "x_chnl" , "y_chnl"]].astype("float16")
         return pdf
 
 if __name__ == "__main__":

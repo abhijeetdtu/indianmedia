@@ -1,5 +1,5 @@
 .embed-custom{
-  padding-bottom: 40%;
+  padding-bottom: 38%;
 }
 
 .col-md-almost-full{
@@ -15,4 +15,18 @@
 .dash-app{
   /* padding: 10px;
   box-shadow: 2px 5px 5px #888888; */
+}
+
+.welcome-logo{
+  position:relative;
+  left:40%;
+  opacity: 50%;
+}
+
+
+.welcome-logo img{
+  height: 10vh;
+    width: 20vh;
+    position: relative;
+    left: -5%;
 }

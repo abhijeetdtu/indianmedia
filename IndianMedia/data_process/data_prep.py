@@ -48,6 +48,7 @@ class DataPrepJob:
         self.df = getDF()
         print(self.df.head())
         self.dbcon = DBConnection()
+        self.max_terms_to_save = 1000
 
     def getVocab(self,df):
         vectorizer = CountVectorizer(min_df=5)
@@ -142,7 +143,7 @@ class DataPrepJob:
         self.df = self.df.dropna()
 
         logging.info("---- Vectorizing")
-        self.cvect = TfidfVectorizer(ngram_range=(1,1) , min_df=10 ,max_df=0.5)
+        self.cvect = TfidfVectorizer(ngram_range=(1,1) , min_df=10 ,max_df=0.5,max_features=self.max_terms_to_save )
 
         allSentsCounts = self.cvect.fit_transform(self.df["filtered_text"])
 

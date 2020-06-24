@@ -28,7 +28,7 @@ class DashApp:
         SHADOW_SM_CLS = "shadow-sm p-1 bg-white rounded"
 
     def __init__(self, route , flaskApp):
-        #self.imp_dump = os.path.join(pathlib.Path(__file__).resolve().parent.parent.absolute() , "static" , "temp_imgs")
+        self.imp_dump = os.path.join(pathlib.Path(__file__).resolve().parent.parent.absolute() , "static" , "temp_imgs")
         self.pool = ThreadPool(5)
         external_stylesheets = [
             'https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css'
@@ -74,13 +74,15 @@ class DashApp:
         else:
             fig = p.draw()
             tmpfile = BytesIO()
-            #tmpfile = str(random.randint(0,100000000))
-            #fp = os.path.join(self.imp_dump , tmpfile)
             fig.savefig(tmpfile, format='png' ,bbox_inches='tight')
             #log.info("Saved--")
             encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
             plot_img = 'data:image/png;base64,{}'.format(encoded)
-            #plot_img = f"/static/temp_imgs/{tmpfile}"
+
+            #tmpfile = str(random.randint(0,100000000))
+            #fp = os.path.join(self.imp_dump , tmpfile)
+            #p.save(fp)
+            #plot_img = f"/static/temp_imgs/{tmpfile}.png"
         return plot_img
 
     def srcToImgs(self,src):

@@ -3,8 +3,10 @@ from IndianMedia.web.dash.WordTrend import WordTrend
 from IndianMedia.data_process.term_dist_metric import TermDistMetricDataFrameService
 from IndianMedia.plotting_constants import THEME, ColorPalette
 
-#from plotnine import ggplot,geom_tile,aes,element_blank,theme,scale_fill_manual,geom_line,geom_text
+from multiprocessing.dummy import Pool as ThreadPool
 
+#from plotnine import ggplot,geom_tile,aes,element_blank,theme,scale_fill_manual,geom_line,geom_text
+import pandas as pd
 from plotnine import *
 
 class TermDistMetric(WordTrend):
@@ -40,12 +42,18 @@ class TermDistMetric(WordTrend):
         #     + THEME.mt \
         #     + theme(figure_size=(20,5) , panel_grid_major=element_blank() , panel_grid_minor=element_blank())
 
+        # + geom_text(tdf.drop_duplicates("word"), aes(x="x_word" , y="y_word" ,label="word"), color="white")\
+        # + geom_label(tdf.drop_duplicates("chnl"),aes(x="x_chnl" , y="y_chnl" ,label="chnl",fill="chnl") , size=20,color="white")\
+        # + annotate("text",x=chnls["x_chnl"] , y=chnls["y_chnl"] ,label=chnls["chnl"] , size=20,color="white")\
+        #print(tdf.drop_duplicates("word").shape)
+        #print(tdf.drop_duplicates("chnl").shape)
+
         p2 = ggplot(tdf)\
             + geom_segment( aes(x="x_chnl" , y="y_chnl",xend="x_word" , yend="y_word" , color="chnl")
-                        , alpha=0.4
+                        , alpha=0.2
                         , linetype='dashed')\
-            + geom_text( aes(x="x_word" , y="y_word" ,label="word"), color="white")\
-            + geom_label( aes(x="x_chnl" , y="y_chnl" ,label="chnl", color="chnl") , size=20,fill="#788987")\
+            + geom_text(tdf.drop_duplicates("word"), aes(x="x_word" , y="y_word" ,label="word"), color="white")\
+            + geom_label(tdf.drop_duplicates("chnl"),aes(x="x_chnl" , y="y_chnl" ,label="chnl",fill="chnl") , size=20,color="white")\
             + colors\
             + THEME.mt\
             + theme(figure_size=(20,7)
@@ -53,4 +61,4 @@ class TermDistMetric(WordTrend):
             , panel_grid_minor=element_blank()
             , axis_title=element_blank())
 
-        return [p2]
+        return p2

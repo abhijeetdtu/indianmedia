@@ -10,6 +10,13 @@
   <!-- <div v-for="app in dashApps" v-html="app" class="col col-md-12">
       </div> -->
   <div class="dash-container container">
+    <div class="row shadow-sm mb-2 bg-white rounded" v-if="dashApps.length == 0">
+      <pre class="welcome-logo shadow-lg p-3 mb-5 bg-white rounded">
+        <img src="{{ url_for('static' , filename='img/logo.png')}}">
+          .<br>──────────▄▄▄▄▄▄▄▄▄──────────<br>───────▄█████████████▄───────<br>▐███▌─█████████████████─▐███▌<br>─████▄─▀███▄─────▄███▀─▄████─<br>─▐█████▄─▀███▄─▄███▀─▄█████▌─<br>──██▄▀███▄─▀█████▀─▄███▀▄██──<br>──▐█▀█▄▀███─▄─▀─▄─███▀▄█▀█▌──<br>───██▄▀█▄██─██▄██─██▄█▀▄██───<br>────▀██▄▀██─█████─██▀▄██▀────<br>───▄──▀████─█████─████▀──▄───<br>───██────────███────────██───<br>───██▄────▄█─███─█▄────▄██───<br>───████─▄███─███─███▄─████───<br>───████─████─███─████─████───<br>───████─████─███─████─████───<br>───████─████▄▄▄▄▄████─████───<br>───▀███─█████████████─███▀───<br>─────▀█─███─▄▄▄▄▄─███─█▀─────<br>────────▀█▌▐█████▌▐█▀────────<br>───────────███████───────────
+      </pre>
+
+    </div>
     <div class="row shadow-sm mb-2 bg-white rounded" v-for="app in dashApps" :key="app">
       <div class="col-md col-md-almost-full">
         <div class="row-fluid">

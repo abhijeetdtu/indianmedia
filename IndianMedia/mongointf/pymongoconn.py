@@ -16,17 +16,9 @@ class DBConnection():
 
     def __init__(self):
         if "MONGO_DEST" in os.environ:
-            """
-            client = pymongo.MongoClient("mongodb+srv://dbAdmin:<password>@indianmedia-cluster-dtqoj.gcp.mongodb.net/<dbname>?retryWrites=true&w=majority")
-            db = client.test
-            """
-            db = os.environ["MONGO_DB_NAME"]
-            dest = os.environ["MONGO_DEST"]
-            user = os.environ["MONGO_USER"]
-            pwd = os.environ["MONGO_PWD"]
-            connString = f"mongodb+srv://{user}:{pwd}@{dest}/{db}?retryWrites=true&w=majority"
+            connString = self.getRemoteConnectionString()
         else:
-            connString = "192.168.99.100:27017"
+            connString = self.getLocalConnectionString()
         self.client = MongoClient(connString)
         self.indianMediaVideoCollection = self.client[MongoConsts.DB][MongoConsts.VIDEO_COLLECTION]
         self.wordDateCollection = self.client[MongoConsts.DB][MongoConsts.WORD_DATE_COLLECTION]

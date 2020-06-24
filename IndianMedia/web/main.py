@@ -8,9 +8,9 @@ from flask import render_template
 from flask import Flask
 app = Flask(__name__)
 
-# WordTrend("/dash/wordtrend/" , app)
-# WordProportion("/dash/wordprop/" , app)
-# WordCorrelations("/dash/wordcorr/" , app)
+WordTrend("/dash/wordtrend/" , app)
+WordProportion("/dash/wordprop/" , app)
+WordCorrelations("/dash/wordcorr/" , app)
 # DistMetric("/dash/distmat/", app)
 TermDistMetric("/dash/termdist/",app)
 
@@ -19,9 +19,7 @@ def hello_world():
     return render_template('landing.html' , dash_urls = ["/dash/wordtrend/"
                                                         , "/dash/wordprop/"
                                                         ,"/dash/wordcorr/"
-                                                        ,"/dash/distmat/"
                                                         ,"/dash/termdist/"])
-
 
 if __name__ == "__main__":
     app.run(debug=True)
