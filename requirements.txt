@@ -4,6 +4,7 @@ sklearn
 spacy
 dash
 plotnine==0.6.0
+mizani
 pymongo==3.10.1
 nltk
 python-youtube

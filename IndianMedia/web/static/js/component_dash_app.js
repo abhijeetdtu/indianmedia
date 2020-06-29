@@ -1,22 +1,25 @@
 Vue.component('dash-app', {
-  props: ['url' , "height" , "width"],
-  data : function(){
-    return {
-        content : ""
-    };
-  },
+  props: ['url' , "classname"],
   template: `
-    <iframe v-bind:src="url" v-bind:width="width" v-bind:height="height"></iframe>
+    <div class="shadow-sm mb-2 bg-white rounded row dash-app">
+      <div class="col-md col-md-almost-full">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="embed-responsive" v-bind:class="classname">
+              <!-- <iframe v-bind:src="url"  class="embed-responsive-item"></iframe> -->
+              <vue-friendly-iframe v-bind:src="url"></vue-friendly-iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-almost-nill">
+        <button type="button" class="btn btn-outline-danger btn-sm" v-on:click="deleteApp()">X</button>
+      </div>
+    </div>
   `,
   methods:{
-    load: function(){
-      self = this;
-      this.$http.get(this.url).then(function(response){
-        data = response.body;
-        self.content =data;
-      });
+    deleteApp : function(){
+      this.$emit('delete', this.url)
     }
-  },
-  mounted: function(){this.load();}
-
+  }
 });

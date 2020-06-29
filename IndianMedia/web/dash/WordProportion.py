@@ -36,7 +36,7 @@ class WordProportion(DashApp):
 
         if len(dfs) == 0:
             return None
-            
+
         df = pd.concat(dfs)
 
         if WordProportion.HTML_IDS.CHECKLIST_ALL in checklist:
@@ -48,9 +48,9 @@ class WordProportion(DashApp):
 
         return df
 
-    def _chart(self,df):
+    def _chart(self,df,checklist , selected_words):
         if df is None:
-            return self.getErrorPlot(self.ERROR_MSG.format(word=word))
+            return self.getErrorPlot(self.ERROR_MSG.format(word=selected_words))
 
         colors = scale_fill_manual(values= self.colors)
         channels = df["channel_id"].unique()
@@ -66,7 +66,7 @@ class WordProportion(DashApp):
     def plot(self,checklist, selected_words):
 
         df = self._filteredDf(checklist , selected_words)
-        p = self._chart(df)
+        p = self._chart(df,checklist , selected_words)
         return p
 
     def getDataFrameMethod(self):
@@ -108,11 +108,20 @@ class WordProportion(DashApp):
             )
         ])
         ,
-        html.Div(className="row-fluid" , children=[
-            html.Img(id=WordProportion.HTML_IDS.IMG,  className="plot-img img-fluid")
-        ])
+        # html.Div(className="row-fluid" , children=[
+        #     html.Img(id=WordProportion.HTML_IDS.IMG,  className="plot-img img-fluid")
+        # ])
         #self.dashImg(id=WordProportion.HTML_IDS.IMG , word=self.default_word)
-
+        dcc.Loading(
+            id="loading-holder",
+            color=THEME.LOADER_COLOR,
+            type=THEME.LOADER_TYPE,
+            children=[
+                html.Div(className="row-fluid" , children=[
+                    html.Img(id=WordProportion.HTML_IDS.IMG,  className="plot-img img-fluid plot-holder-div")
+                ])
+            ]
+        )
         ]
 
         )

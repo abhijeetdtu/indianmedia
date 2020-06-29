@@ -6,6 +6,11 @@ var app = new Vue({
     dashApps:[]
   },
   methods:{
+    loadHelp: function(url){
+      console.log(url)
+      url = "/help/"+url
+      this.loadDashApp(url)
+    },
     loadDashApp : function(url){
       // For correct ordering of apps while displaying
       var r = Math.floor(Math.random()*1000000)

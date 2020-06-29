@@ -53,3 +53,18 @@ class ColorPalette:
         colorDict =  json.loads(s.to_json(orient="index"))
         ColorPalette.alreadyMapped[key] = colorDict
         return ColorPalette.alreadyMapped[key]
+
+    # @staticmethod
+    # def sticky_color_map(series):
+    #     unq = series.unique()
+    #     n = len(unq)
+    #
+    #     if n > len(THEME.colors_light):
+    #         raise Exception(f"Number of Categories is greater than {len(THEME.colors_light)}.")
+    #
+    #
+    #     colors_new = random.choice(THEME.colors_light , n - len(colors) , replace=False)
+    #     for
+    #     s = Series(colors + colors_new , index=unq ,name="color")
+    #     colorDict =  json.loads(s.to_json(orient="index"))
+    #     return ColorPalette.alreadyMapped[key]

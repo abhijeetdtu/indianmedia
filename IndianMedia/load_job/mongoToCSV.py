@@ -1,15 +1,38 @@
     # %load_ext autoreload
 # %autoreload 2
 
+from IndianMedia.constants import MongoConsts
 from IndianMedia.mongointf.pymongoconn import DBConnection
 from IndianMedia.utils import getCurrentDIR
 from IndianMedia.constants import Channels
 
 import pandas as pd
-
+import json
 import csv
 import os
+from ast import literal_eval
 
+def getWordDatesDF(limit=None):
+    connection  =DBConnection()
+    collection  =connection.getCollection(MongoConsts.WORD_DATE_COLLECTION)
+    dfs = []
+    r = collection.find() if limit == None else collection.find().limit(limit)
+    for vid in r:
+        df = pd.read_json(json.dumps(vid["ts"]),orient="index")
+        df.columns = [vid["word_id"]]
+        dfs.append(df)
+
+    merged = pd.concat(dfs , axis=1)
+    merged.index = pd.MultiIndex.from_tuples([literal_eval(i) for i in merged.index])
+
+    merged = merged.reset_index()
+
+    merged["level_0"] = pd.to_datetime(merged["level_0"]  , format="%m_%d_%y")
+    merged = merged.sort_values("level_0")
+    merged["level_0"] = merged["level_0"].dt.strftime("%m_%d_%y")
+    merged = merged.set_index(["level_0" , "level_1"])
+
+    return merged
 
 def getDF():
     connection  =DBConnection()

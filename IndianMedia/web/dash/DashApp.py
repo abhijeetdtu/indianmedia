@@ -16,6 +16,10 @@ from IndianMedia.utils import getLogging
 
 log = getLogging()
 
+import time
+
+
+
 class DashApp:
 
     class HTML_IDS:
@@ -69,6 +73,8 @@ class DashApp:
         return p
 
     def plotToImgSrc(self,p):
+        log.info("Img To SRC")
+        start_time = time.time()
         if type(p) == list:
             plot_img = self.pool.map(lambda pi:self.plotToImgSrc(pi) , p) #[self.plotToImgSrc(pi) for pi in p]
         else:
@@ -83,6 +89,7 @@ class DashApp:
             #fp = os.path.join(self.imp_dump , tmpfile)
             #p.save(fp)
             #plot_img = f"/static/temp_imgs/{tmpfile}.png"
+        log.info(f"Done - Img To SRC - {time.time()-start_time}")
         return plot_img
 
     def srcToImgs(self,src):

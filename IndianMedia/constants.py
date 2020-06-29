@@ -25,6 +25,8 @@ class MongoConsts:
     QD_TRBD_TERM_DIST_COLLECTION = f"{QD_TERM_BASED_DISTANCE_ROOT}.termdist"
     QD_TRBD_GRP_DIST_COLLECTION = f"{QD_TERM_BASED_DISTANCE_ROOT}.groupdist"
 
+    TERM_RANK_COLLECTION = "tr.termrank"
+    
 class Channels:
     WIRE= "UChWtJey46brNr7qHQpN6KLQ"
     THE_PRINT = "UCuyRsHZILrU7ZDIAbGASHdA"

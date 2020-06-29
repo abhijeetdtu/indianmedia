@@ -2,6 +2,7 @@ import os
 
 from pymongo import MongoClient
 from IndianMedia.constants import MongoConsts
+from IndianMedia.utils import getLogging
 
 def singleton(class_):
     instances = {}
@@ -10,6 +11,8 @@ def singleton(class_):
             instances[class_] = class_(*args, **kwargs)
         return instances[class_]
     return getinstance
+
+logging = getLogging()
 
 @singleton
 class DBConnection():
@@ -20,7 +23,6 @@ class DBConnection():
         else:
             connString = self.getLocalConnectionString()
 
-        print(connString)
         self.client = MongoClient(connString)
         self.indianMediaVideoCollection = self.client[MongoConsts.DB][MongoConsts.VIDEO_COLLECTION]
         self.wordDateCollection = self.client[MongoConsts.DB][MongoConsts.WORD_DATE_COLLECTION]

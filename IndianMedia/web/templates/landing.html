@@ -3,9 +3,35 @@
 {% block content %}
 
 <div id="vue-app" class="vue-app">
-  <b-dropdown id="dropdown-1" text="Add a Dashboard" class="m-md-2">
-    <b-dropdown-item v-for="option in {{ dash_urls }}" :key="option" :value="option" @click="loadDashApp(option)">[[option]]</b-dropdown-item>
-  </b-dropdown>
+  <div class="dropdown m-md-2">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" a ria-expanded="false">
+      Add a Dashboard
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-item" v-for="url_label in {{ dash_urls }}">
+        <div class="row">
+          <div class="col-md-9 pr-2 dash-label" @click="loadDashApp(url_label[0])">
+            [[ url_label[1] ]]
+          </div>
+          <div class="col-md-2 pr-0" @click="loadHelp(url_label[1])">
+            <i class="far fa-question-circle dash-label-help" ></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <b-dropdown id="dropdown-1" text="Add a Dashboard" class="m-md-2">
+    <b-dropdown-item v-for="url_label in {{ dash_urls }}" :key="url_label[0]" :value="url_label[1]">
+      <div class="row">
+        <div class="col-md-9 pr-0" @click="loadDashApp(url_label[0])">
+          [[ url_label[1] ]]
+        </div>
+        <div class="col-md-2 pr-0">
+          <i class="far fa-question-circle"></i>
+        </div>
+      </div>
+    </b-dropdown-item>
+  </b-dropdown> -->
   <!-- <button v-on:click="loadDashApp('/dash/wordtrend/')" class="btn btn-dark">Load Dash App</button> -->
   <!-- <div v-for="app in dashApps" v-html="app" class="col col-md-12">
       </div> -->
@@ -17,19 +43,8 @@
       </pre>
 
     </div>
-    <div class="row shadow-sm mb-2 bg-white rounded" v-for="app in dashApps" :key="app">
-      <div class="col-md col-md-almost-full">
-        <div class="row-fluid">
-          <div class="col-md-12">
-            <div class="embed-responsive embed-custom">
-              <iframe v-bind:src="app" class="embed-responsive-item"> </iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-almost-nill">
-        <button type="button" class="btn btn-outline-danger btn-sm" v-on:click="deleteDashApp(app)">X</button>
-      </div>
+    <div class="row" v-for="app in dashApps" :key="app">
+      <dash-app v-on:delete="deleteDashApp" v-bind:url="app" classname="embed-custom"></dash-app>
     </div>
   </div>
 </div>
