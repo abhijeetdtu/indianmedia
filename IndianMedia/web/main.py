@@ -21,7 +21,7 @@ dash_endpoints = {
     "/dash/wordtrend/" : [WordTrend , "Word Trend"],
     "/dash/wordprop/" : [WordProportion , "Word Proportions"],
     "/dash/wordcorr/" : [WordCorrelations , "Word Correlations"],
-    #"/dash/termdist/" : [TermDistMetric , "Term Distance"],
+    "/dash/termdist/" : [TermDistMetric , "Term Distance"],
     "/dash/trendrank/" : [TrendRank , "Word Rank Trend"]
 }
 
